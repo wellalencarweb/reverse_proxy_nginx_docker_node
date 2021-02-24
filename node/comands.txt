@@ -1,0 +1,7 @@
+docker exec -it db-mysql-full-cycle bash
+mysql -uroot -p
+(password: root)
+show databases;
+use nodedb;
+create table people(id int not null auto_increment, name varchar(255), primary key(id));  
+desc people;

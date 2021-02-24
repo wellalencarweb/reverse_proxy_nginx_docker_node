@@ -12,31 +12,29 @@ const config = {
     database:'nodedb'
 };
 const mysql = require('mysql')
-const connection = mysql.createConnection(config)
-
-const sql = `INSERT INTO people(name) values('Wellington'),('Well'),('Tom');`
-const sqlList = `SELECT * FROM  people;`
-const list = 'aqui'
-connection.query(sql)
-connection.query(sqlList)
-
-
-// connection.connect(function(err) {
-//   if (err) throw err;
-//   con.query(sqlList, function (err, result, fields) {
-//     if (err) throw err;
-//     list = result
-//     console.log(result);
-//   });
-// });
-
-connection.end()
-
+//const sqlInsert = `INSERT INTO people(name) values('Wellington'),('Well'),('Tom'), ('FullCycle');`
 // App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('<h1>Full Cycle Rocks!</h1>');
-  res.send(`<h1>${list}</h1>`);
+  const connection = mysql.createConnection(config)
+  
+  connection.query('SELECT name FROM  people', function(err, rows) {
+    if (err) {
+      throw err;
+    }
+    
+    let list = '';
+    rows.forEach( (row) => {
+      let result = `<h4>${row.name}</h4>`;
+      list = list.concat(result);
+      // console.log(`${row.name}`);
+    });
+    
+    res.send('<h1>Full Cycle Rocks!</h1>'+list);
+    
+  });
+  
+  connection.end();
 });
 
 app.listen(PORT, HOST);
